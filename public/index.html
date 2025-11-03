@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #messages li {
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        #messages li.system {
+            background: #e3f2fd;
+            font-style: italic;
+        }
+
+        #form {
+            display: flex;
+        }
+
+        #input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #typingIndicator {
+            color: #666;
+            font-style: italic;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="messages"></ul>
+    <div id="typingIndicator"></div>
+    <form id="form">
+        <input id="input" autocomplete="off" placeholder="Type your message..." />
+        <button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        let typingTimer;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+                stopTyping();
+            }
+        });
+
+        input.addEventListener('input', () => {
+            socket.emit('typing', true);
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(stopTyping, 1000);
+        });
+
+        function stopTyping() {
+            socket.emit('typing', false);
+        }
+
+        socket.on('chat message', (data) => {
+            const item = document.createElement('li');
+            if (data.user === 'System') {
+                item.classList.add('system');
+            }
+            item.textContent = `[${new Date(data.timestamp).toLocaleTimeString()}] ${data.user}: ${data.message}`;
+            messages.appendChild(item);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        socket.on('user typing', (data) => {
+            if (data.isTyping) {
+                typingIndicator.textContent = `User ${data.socketId.substring(0, 6)} is typing...`;
+            } else {
+                typingIndicator.textContent = '';
+            }
+        });
+
+        socket.on('error', (error) => {
+            alert('Error: ' + error);
+        });
+    </script>
+</body>
+
+</html>
