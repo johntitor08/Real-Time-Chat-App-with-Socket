@@ -65,6 +65,7 @@
         .user-list {
             flex: 1;
             overflow-y: auto;
+            max-height: 200px;
         }
 
         .room-item,
@@ -210,6 +211,11 @@
             margin-right: 0;
         }
 
+        .message.file {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+        }
+
         .message-header {
             font-size: 12px;
             opacity: 0.8;
@@ -278,7 +284,207 @@
             padding: 0 20px;
         }
 
-        /* Room Creation Modal */
+        /* File Upload Styles */
+        .upload-area {
+            margin: 20px 0;
+        }
+
+        .drop-zone {
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .drop-zone:hover {
+            background: #e3f2fd;
+            border-color: #2980b9;
+        }
+
+        .drop-zone.dragover {
+            background: #bbdefb;
+            border-color: #1565c0;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        /* Message Reactions */
+        .message-reactions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .reaction {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .reaction:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: #3498db;
+        }
+
+        .reaction.own-reaction {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
+        }
+
+        .reaction-count {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .reaction-btn {
+            cursor: pointer;
+            opacity: 0.5;
+            margin-top: 5px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .reaction-btn:hover {
+            opacity: 1;
+        }
+
+        /* File message styles */
+        .file-message {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .file-icon-large {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+
+        .file-content {
+            flex: 1;
+        }
+
+        .file-download {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .file-download:hover {
+            background: #2980b9;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 10px;
+        }
+
+        .emoji-categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .emoji-category {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .emoji-category.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji {
+            cursor: pointer;
+            padding: 5px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .emoji:hover {
+            background: #ecf0f1;
+        }
+
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -340,10 +546,6 @@
             color: #2c3e50;
         }
 
-        .hidden {
-            display: none;
-        }
-
         /* Login Screen */
         .login-container {
             background: white;
@@ -386,6 +588,10 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -454,6 +660,8 @@
 
                 <div class="input-area">
                     <div class="input-group">
+                        <button type="button" onclick="showFileUploadModal()"
+                            style="padding: 15px; background: #27ae60;">📎</button>
                         <input type="text" id="messageInput" placeholder="Type your message... (Use /help for commands)"
                             disabled>
                         <button id="sendButton" onclick="sendMessage()" disabled>Send</button>
@@ -493,14 +701,61 @@
         </div>
     </div>
 
+    <!-- File Upload Modal -->
+    <div id="fileUploadModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Upload File</h2>
+            <div class="upload-area">
+                <input type="file" id="fileInput" hidden>
+                <div id="dropZone" class="drop-zone">
+                    <div>📁</div>
+                    <p>Drag & drop files here or click to browse</p>
+                    <p class="file-info">Max size: 10MB • Images, PDF, TXT, MP3, MP4</p>
+                </div>
+                <div id="filePreview" class="file-preview hidden"></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="hideFileUploadModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="uploadFile()" id="uploadBtn" disabled>Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emoji Picker -->
+    <div id="emojiPicker" class="emoji-picker hidden">
+        <div class="emoji-categories">
+            <span class="emoji-category active" onclick="showEmojiCategory('smileys')">😀</span>
+            <span class="emoji-category" onclick="showEmojiCategory('people')">👋</span>
+            <span class="emoji-category" onclick="showEmojiCategory('nature')">🐻</span>
+            <span class="emoji-category" onclick="showEmojiCategory('food')">🍕</span>
+            <span class="emoji-category" onclick="showEmojiCategory('activities')">⚽</span>
+            <span class="emoji-category" onclick="showEmojiCategory('objects')">💡</span>
+            <span class="emoji-category" onclick="showEmojiCategory('symbols')">❤️</span>
+            <span class="emoji-category" onclick="showEmojiCategory('flags')">🎌</span>
+        </div>
+        <div class="emoji-grid" id="emojiGrid">
+            <!-- Emojis will be populated here -->
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         let currentUser = null;
         let currentRoom = null;
-        let privateChatTarget = null;
-        let typingTimer;
+        let selectedFile = null;
+        let currentReactingMessage = null;
         let selectedRoomToJoin = null;
+        let typingTimer;
+
+        // Emoji data
+        const emojiCategories = {
+            smileys: ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕'],
+            people: ['👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '👊', '✊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝', '🙏'],
+            nature: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐜', '🦟', '🦗', '🕷️', '🦂', '🐢', '🐍', '🦎', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', '🐋', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍', '🦧', '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🐃', '🐂', '🐄', '🐎', '🐖', '🐏', '🐑', '🦙', '🐐', '🦌', '🐕', '🐩', '🐈', '🦜', '🦢', '🦩', '🐇', '🦝', '🦨', '🦡', '🦦', '🦥', '🐁', '🐀', '🐿️', '🦔'],
+            food: ['🍏', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🫑', '🌽', '🥕', '🫒', '🧄', '🧅', '🥔', '🍠', '🥐', '🥯', '🍞', '🥖', '🥨', '🧀', '🥚', '🍳', '🧈', '🥞', '🧇', '🥓', '🥩', '🍗', '🍖', '🦴', '🌭', '🍔', '🍟', '🍕', '🫓', '🥪', '🥙', '🧆', '🌮', '🌯', '🫔', '🥗', '🥘', '🫕', '🥫', '🍝', '🍜', '🍲', '🍛', '🍣', '🍱', '🥟', '🦪', '🍤', '🍙', '🍚', '🍘', '🍥', '🥠', '🥮', '🍢', '🍡', '🍧', '🍨', '🍦', '🥧', '🧁', '🍰', '🎂', '🍮', '🍭', '🍬', '🍫', '🍿', '🍩', '🍪', '🌰', '🥜', '🫘', '🍯', '🥛', '🍼', '🫖', '☕', '🍵', '🧃', '🥤', '🧋', '🍶', '🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🧉', '🍾', '🧊', '🥄', '🍴', '🍽️', '🥣', '🥡', '🥢', '🧂'],
+            activities: ['⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🏉', '🥏', '🎱', '🪀', '🏓', '🏸', '🏒', '🏑', '🥍', '🏏', '🪃', '🥅', '⛳', '🪁', '🏹', '🎣', '🤿', '🥊', '🥋', '🎽', '🛹', '🛼', '🛷', '⛸️', '🥌', '🎿', '⛷️', '🏂', '🪂', '🏋️', '🤼', '🤸', '⛹️', '🤾', '🏌️', '🏇', '🧘', '🏄', '🏊', '🤽', '🚣', '🧗', '🚵', '🚴', '🏆', '🥇', '🥈', '🥉', '🏅', '🎖️', '🏵️', '🎗️', '🎫', '🎟️', '🎪', '🤹', '🎭', '🩰', '🎨', '🎬', '🎤', '🎧', '🎼', '🎹', '🥁', '🪘', '🎷', '🎺', '🪗', '🎸', '🪕', '🎻', '🎲', '♟️', '🎯', '🎳', '🎮', '🎰', '🧩']
+        };
 
         // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -563,10 +818,12 @@
         // Room management
         function showCreateRoomModal() {
             document.getElementById('createRoomModal').classList.remove('hidden');
+            document.getElementById('newRoomName').focus();
         }
 
         function hideCreateRoomModal() {
             document.getElementById('createRoomModal').classList.add('hidden');
+            document.getElementById('newRoomName').value = '';
         }
 
         function createRoom() {
@@ -576,7 +833,6 @@
             if (name) {
                 socket.emit('create room', { name: name, type: type });
                 hideCreateRoomModal();
-                document.getElementById('newRoomName').value = '';
             }
         }
 
@@ -605,6 +861,199 @@
 
         function leaveRoom() {
             socket.emit('leave room');
+        }
+
+        // File upload functionality
+        function showFileUploadModal() {
+            document.getElementById('fileUploadModal').classList.remove('hidden');
+        }
+
+        function hideFileUploadModal() {
+            document.getElementById('fileUploadModal').classList.add('hidden');
+            selectedFile = null;
+            document.getElementById('filePreview').innerHTML = '';
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('fileInput').value = '';
+        }
+
+        // Handle file selection
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        document.getElementById('dropZone').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        // Drag and drop
+        const dropZone = document.getElementById('dropZone');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropZone.classList.add('dragover');
+        }
+
+        function unhighlight() {
+            dropZone.classList.remove('dragover');
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                selectedFile = files[0];
+                previewFile(selectedFile);
+            }
+        }
+
+        function previewFile(file) {
+            const preview = document.getElementById('filePreview');
+            preview.innerHTML = '';
+
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+
+            const icon = getFileIcon(file.type);
+
+            fileItem.innerHTML = `
+                <div style="display: flex; align-items: center; flex: 1;">
+                    <div class="file-icon">${icon}</div>
+                    <div class="file-details">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                </div>
+                <button onclick="removeFile()" style="background: none; border: none; cursor: pointer; font-size: 16px;">❌</button>
+            `;
+
+            preview.appendChild(fileItem);
+            preview.classList.remove('hidden');
+            document.getElementById('uploadBtn').disabled = false;
+        }
+
+        function removeFile() {
+            selectedFile = null;
+            document.getElementById('filePreview').innerHTML = '';
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('fileInput').value = '';
+            document.getElementById('uploadBtn').disabled = true;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileIcon(mimetype) {
+            const fileType = mimetype.split('/')[0];
+            if (fileType === 'image') return '🖼️';
+            if (fileType === 'video') return '🎥';
+            if (fileType === 'audio') return '🎵';
+            if (mimetype.includes('pdf')) return '📕';
+            if (mimetype.includes('text')) return '📝';
+            return '📄';
+        }
+
+        async function uploadFile() {
+            if (!selectedFile) return;
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    socket.emit('file message', {
+                        file: result.file
+                    });
+
+                    hideFileUploadModal();
+                } else {
+                    alert('Upload failed: ' + result.error);
+                }
+            } catch (error) {
+                alert('Upload error: ' + error.message);
+            }
+        }
+
+        // Emoji reactions functionality
+        function showEmojiPicker(messageId, element) {
+            currentReactingMessage = messageId;
+            const picker = document.getElementById('emojiPicker');
+            picker.classList.remove('hidden');
+
+            const rect = element.getBoundingClientRect();
+            picker.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+            picker.style.right = (window.innerWidth - rect.right) + 'px';
+
+            showEmojiCategory('smileys');
+        }
+
+        function hideEmojiPicker() {
+            document.getElementById('emojiPicker').classList.add('hidden');
+            currentReactingMessage = null;
+        }
+
+        function showEmojiCategory(category) {
+            const grid = document.getElementById('emojiGrid');
+            grid.innerHTML = '';
+
+            document.querySelectorAll('.emoji-category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            emojiCategories[category].forEach(emoji => {
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'emoji';
+                emojiElement.textContent = emoji;
+                emojiElement.onclick = () => addReaction(emoji);
+                grid.appendChild(emojiElement);
+            });
+        }
+
+        function addReaction(emoji) {
+            if (!currentReactingMessage) return;
+
+            socket.emit('message reaction', {
+                messageId: currentReactingMessage,
+                emoji: emoji,
+                roomId: currentRoom.id
+            });
+
+            hideEmojiPicker();
         }
 
         // Socket event handlers
@@ -646,6 +1095,41 @@
             });
         });
 
+        socket.on('message history', (history) => {
+            messages.innerHTML = '';
+
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'message system';
+            welcomeMsg.innerHTML = `
+                <div class="message-content">
+                    Loading message history...
+                </div>
+            `;
+            messages.appendChild(welcomeMsg);
+
+            setTimeout(() => {
+                messages.innerHTML = '';
+                history.forEach(message => {
+                    addMessage(message);
+                });
+            }, 500);
+        });
+
+        socket.on('message reaction', (data) => {
+            const messageElement = document.getElementById('msg-' + data.messageId);
+            if (messageElement) {
+                const existingReactions = messageElement.querySelector('.message-reactions');
+                if (existingReactions) {
+                    existingReactions.remove();
+                }
+
+                if (Object.keys(data.reactions).length > 0) {
+                    const reactionsHTML = createReactionsHTML(data.reactions, data.messageId);
+                    messageElement.insertAdjacentHTML('beforeend', reactionsHTML);
+                }
+            }
+        });
+
         socket.on('user typing', (data) => {
             if (data.isTyping) {
                 typingIndicator.textContent = `${data.username} is typing...`;
@@ -667,35 +1151,100 @@
                 messageClass += 'system';
             } else if (data.type === 'private') {
                 messageClass += data.fromId === socket.id ? 'own-private' : 'private';
+            } else if (data.type === 'file') {
+                messageClass += 'file';
             } else {
                 messageClass += data.user === currentUser ? 'own-public' : 'public';
             }
 
             messageDiv.className = messageClass;
+            messageDiv.id = 'msg-' + data.id;
 
-            if (data.type === 'private') {
-                const direction = data.fromId === socket.id ? 'To' : 'From';
-                const user = data.fromId === socket.id ? data.to : data.from;
-
-                messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <span>${direction} ${user} (Private)</span>
-                        <span>${new Date(data.timestamp).toLocaleTimeString()}</span>
-                    </div>
-                    <div class="message-content">${data.message}</div>
-                `;
+            if (data.type === 'file') {
+                messageDiv.innerHTML = createFileMessageHTML(data);
+            } else if (data.type === 'private') {
+                messageDiv.innerHTML = createPrivateMessageHTML(data);
             } else {
-                messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <span>${data.user || 'System'}</span>
-                        <span>${new Date(data.timestamp).toLocaleTimeString()}</span>
-                    </div>
-                    <div class="message-content">${data.message}</div>
-                `;
+                messageDiv.innerHTML = createRegularMessageHTML(data);
+            }
+
+            // Add reaction button for non-system messages
+            if (data.type !== 'system') {
+                const reactionBtn = document.createElement('div');
+                reactionBtn.className = 'reaction-btn';
+                reactionBtn.innerHTML = '😊';
+                reactionBtn.onclick = (e) => showEmojiPicker(data.id, e.target);
+
+                messageDiv.appendChild(reactionBtn);
+            }
+
+            // Add reactions if they exist
+            if (data.reactions && Object.keys(data.reactions).length > 0) {
+                const reactionsHTML = createReactionsHTML(data.reactions, data.id);
+                messageDiv.insertAdjacentHTML('beforeend', reactionsHTML);
             }
 
             messages.appendChild(messageDiv);
             messages.scrollTop = messages.scrollHeight;
+        }
+
+        function createFileMessageHTML(data) {
+            const file = data.file;
+            const icon = getFileIcon(file.mimetype);
+
+            return `
+                <div class="message-header">
+                    <span>${data.user}</span>
+                    <span>${new Date(data.timestamp).toLocaleTimeString()}</span>
+                </div>
+                <div class="file-message">
+                    <div class="file-icon-large">${icon}</div>
+                    <div class="file-content">
+                        <div style="font-weight: bold; margin-bottom: 5px;">${file.originalname}</div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 10px;">${formatFileSize(file.size)}</div>
+                        <a href="${file.url}" class="file-download" download="${file.originalname}">Download</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createPrivateMessageHTML(data) {
+            const direction = data.fromId === socket.id ? 'To' : 'From';
+            const user = data.fromId === socket.id ? data.to : data.from;
+
+            return `
+                <div class="message-header">
+                    <span>${direction} ${user} (Private)</span>
+                    <span>${new Date(data.timestamp).toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${data.message}</div>
+            `;
+        }
+
+        function createRegularMessageHTML(data) {
+            return `
+                <div class="message-header">
+                    <span>${data.user || 'System'}</span>
+                    <span>${new Date(data.timestamp).toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${data.message}</div>
+            `;
+        }
+
+        function createReactionsHTML(reactions, messageId) {
+            let html = '<div class="message-reactions">';
+            for (const [emoji, users] of Object.entries(reactions)) {
+                const hasReacted = users.includes(currentUser);
+                html += `
+                    <div class="reaction ${hasReacted ? 'own-reaction' : ''}" 
+                         onclick="socket.emit('message reaction', {messageId: '${messageId}', emoji: '${emoji}', roomId: '${currentRoom.id}'})">
+                        ${emoji}
+                        <span class="reaction-count">${users.length}</span>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
         }
 
         function updateUserList(users) {
@@ -744,6 +1293,13 @@
                 roomList.appendChild(roomDiv);
             });
         }
+
+        // Close emoji picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.emoji-picker') && !e.target.closest('.reaction-btn')) {
+                hideEmojiPicker();
+            }
+        });
     </script>
 </body>
 
