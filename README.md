@@ -2,7 +2,9 @@
 
 A feature-rich, real-time chat application with secure rooms, file sharing, and emoji reactions. Built with Node.js, Express, and Socket.IO.
 
-<https://img.shields.io/badge/Live-Demo-brightgreen> <https://img.shields.io/badge/Node.js-18+-green> <https://img.shields.io/badge/Socket.IO-4.0-blue>
+![alt text](https://img.shields.io/badge/Live-Demo-brightgreen)
+![alt text](https://img.shields.io/badge/Node.js-18+-green)
+![alt text](https://img.shields.io/badge/Socket.IO-4.0-blue)
 
 ## 🚀 Live Demo
 
